@@ -2,6 +2,10 @@ const CURRENT_VERSION = 37;
 
 const STATUS_OK = 200;
 
+// Imagine buying a domain
+const SERVER_ADDR = "http://18.189.170.61";
+// const SERVER_ADDR = "http://localhost:3000";
+
 async function uploadWithLogin(){
   console.log("Started");
   document.getElementById("submit-button").disabled = true;
@@ -26,7 +30,7 @@ async function getAuthToken(){
     method: "POST",
     body: JSON.stringify({"Email": email, "Password": password, "Version": CURRENT_VERSION}),
     headers: {
-      "content-type": "application/json; utf-8",
+      "Content-Type": "application/json; utf-8",
       "authority": "api.teamwood.games"
     }
   });
@@ -73,18 +77,19 @@ async function fetchAndUploadGame(authToken, gameID){
     headers: {
       "authorization": authToken,
       "authority": "api.teamwood.games",
-      "content-type": "application/json; utf-8"
+      "Content-Type": "application/json; utf-8"
     }
   });
   let responseJSON = await response.json();
   responseJSON["Version"] = CURRENT_VERSION;
+  console.log(responseJSON);
   // POST to server
-  let uploadResponse = await fetch(`deez`, {
+  let uploadResponse = await fetch(`${SERVER_ADDR}/uploadGames`, {
     method: "POST",
-    body: JSON.stringify(responseJSON),
     headers: {
-      "content-type": "application/json"
-    }
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(responseJSON)
   });
   console.log(uploadResponse.status);
 }
